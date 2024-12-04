@@ -1,0 +1,211 @@
+/* Base Styles */
+:root {
+  --background-dark: #030014;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --neon-pink: #FF10F0;
+  --neon-purple: #7B2DFF;
+  --neon-cyan: #14F195;
+  --neon-red: #FF3864;
+  --z-background: 0;
+  --z-particles: 5;
+  --z-overlay: 10;
+  --z-content: 20;
+}
+
+/* Reset & Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: var(--background-dark);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Main Container */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: transparent;
+  isolation: isolate;
+}
+
+/* Background Styles */
+.fixed {
+  position: fixed;
+}
+
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+/* Particle Effects */
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+/* Z-index Layering */
+.particle-container {
+  z-index: var(--z-particles);
+}
+
+.gradient-overlay {
+  z-index: var(--z-overlay);
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    var(--background-dark) 70%
+  );
+}
+
+/* Content Layering */
+.app-container > *:not(.background-container) {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+/* Animation Keyframes */
+@keyframes spray {
+  0% {
+    transform: scale(1) translate(0, 0);
+    opacity: 0;
+  }
+  25% {
+    opacity: var(--tw-opacity, 1);
+  }
+  75% {
+    opacity: var(--tw-opacity, 1);
+  }
+  100% {
+    transform: scale(1.5) translate(var(--translate-x, 100px), var(--translate-y, 100px));
+    opacity: 0;
+  }
+}
+
+.animate-spray {
+  animation: spray var(--duration, 3s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
+}
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-spray {
+    animation-duration: calc(var(--duration) * 2);
+  }
+}
+
+/* Hardware Acceleration */
+.particle-container, 
+.gradient-overlay, 
+.animate-spray {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .particle-container {
+    --particle-scale: 0.8;
+  }
+  
+  .gradient-overlay {
+    background: radial-gradient(
+      circle at center,
+      transparent 0%,
+      var(--background-dark) 60%
+    );
+  }
+}
+
+@media screen and (min-width: 2000px) {
+  .particle-container {
+    --particle-scale: 1.5;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .particle-container,
+  .gradient-overlay {
+    display: none;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+}
+
+/* Accessibility */
+@media (prefers-contrast: high) {
+  :root {
+    --text-secondary: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Loading State */
+.app-container.loading {
+  cursor: wait;
+}
+
+.app-container.loading .particle-container {
+  opacity: 0.5;
+}
+
+/* Fade Transitions */
+.app-container > * {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neon-purple);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-pink);
+}
+
+/* Selection Styling */
+::selection {
+  background-color: var(--neon-purple);
+  color: white;
+}
